@@ -1,55 +1,41 @@
-function editableInit(e) {
-    e.stopPropagation();
-    var $editable = $(e.srcElement).findEditable();
-    $editable.attr('contenteditable', true);
-
-    // if the editor isn't already built, build it
-    var $editor = $('.editor-panel');
-    if (!$editor.size()) {
-        $editor = $('<div class="editor-panel">');
-        var editorAttrs = { editable: $editable, editableModel: this.model };
-        document.body.appendChild($editor[0]);
-        $editor.instantiate({classType: 'Editor', attrs: editorAttrs});
-        // $editor.show('fade');
-
-    // check if we are on a new editable
-    } else if ($editable[0] !== $editor.model().get('editable')[0]) {
-        // set new editable
-        $editor.model().set({
-            editable: $editable,
-        	editableModel: this.model
-        });
-    }
-
-    // instantiate any images that may be in the editable
-    var imgs = $editable.find('img');
-    if (imgs.size()) {
-        var attrs = { editable: $editable, editableModel: this.model };
-        imgs.each(function() {
-            $(this).instantiate({classType: 'EditableImage', attrs: attrs});
-        });
-    }
-
-    // listen for mousedowns that are not coming from the editor
-    // and close the editor
-    $('body').bind('mousedown.editor', function(e) {
-        if ($(e.srcElement).not('.editor-panel, .editor-panel *, .image-tools, .image-tools *').size()) {
-            $editor.remove();
-            // unblind the image-tools if the editor isn't active
-            $editable.find('img').unbind('mouseover');
-            // once the editor is removed, remove the body binding for it
-            $(this).unbind('mousedown.editor');
-        }
-    });
-
-    $editor.model().set({position: {x: e.pageX - 15, y: e.pageY - 80}});
-}
-
 (function() {
-    var models = window.app.models,
-        views = window.app.views;
+    var root = this,
+        models = {},
+        views = {},
+        collections = {};
+
     
-    models.Editor = models.Model.extend({
+        
+    $.fn.etchInstantiate = function(options, cb) {
+        return this.each(function() {
+            var $el = $(this);
+            options || (options = {});
+
+            settings = {
+                el: this,
+                attrs: {}
+            }
+
+            _.extend(settings, options);
+
+            var model = new models[settings.classType](settings.attrs, settings);
+
+            // initialize a view is there is one
+            if (_.isFunction(views[settings.classType])) {
+                var view = new views[settings.classType]({model: model, el: this, tagName: this.tagName});
+            }
+           
+            // stash the model and view on the elements data object
+            $el.data({model: model});
+            $el.data({view: view});
+
+            if (_.isFunction(cb)) {
+                cb({model: model, view: view});
+            }
+        });
+    }
+
+    models.Editor = Backbone.Model.extend({
         // Named sets of buttons to be specified on the editable element
         // in the markup as "data-button-class"
         buttonClasses: {
@@ -61,7 +47,7 @@ function editableInit(e) {
         }
     });
 
-    views.Editor = views.View.extend({
+    views.Editor = Backbone.View.extend({
         initialize: function() {
             this.$el = $(this.el);
             
@@ -264,4 +250,64 @@ function editableInit(e) {
             editableModel.trigger('save');
         }
     });
+
+    var etch =  {
+        models: models,
+        views: views,
+        collections: collections,
+
+        // This function is to be used as callback to whatever event
+        // you use to initialize editing 
+        editableInit: function(e) {
+            e.stopPropagation();
+            var $editable = $(e.srcElement).findEditable();
+            $editable.attr('contenteditable', true);
+
+            // if the editor isn't already built, build it
+            var $editor = $('.editor-panel');
+            if (!$editor.size()) {
+                $editor = $('<div class="editor-panel">');
+                var editorAttrs = { editable: $editable, editableModel: this.model };
+                document.body.appendChild($editor[0]);
+                $editor.etchInstantiate({classType: 'Editor', attrs: editorAttrs});
+                editorModel = $editor.data('model');
+
+            // check if we are on a new editable
+            } else if ($editable[0] !== editorModel.get('editable')[0]) {
+                // set new editable
+                editorModel.set({
+                    editable: $editable,
+                    editableModel: this.model
+                });
+            }
+
+            if (models.EditableImage) {
+                // instantiate any images that may be in the editable
+                var imgs = $editable.find('img');
+                if (imgs.size()) {
+                    var attrs = { editable: $editable, editableModel: this.model };
+                    imgs.each(function() {
+                        $(this).etchInstantiate({classType: 'EditableImage', attrs: attrs});
+                    });
+                }
+            }
+
+            // listen for mousedowns that are not coming from the editor
+            // and close the editor
+            $('body').bind('mousedown.editor', function(e) {
+                if ($(e.srcElement).not('.editor-panel, .editor-panel *, .image-tools, .image-tools *').size()) {
+                    $editor.remove();
+                    // unblind the image-tools if the editor isn't active
+                    $editable.find('img').unbind('mouseover');
+                    // once the editor is removed, remove the body binding for it
+                    $(this).unbind('mousedown.editor');
+                }
+            });
+
+            editorModel.set({position: {x: e.pageX - 15, y: e.pageY - 80}});
+        }
+    };
+
+    
+    window.etch = etch;
 })();
