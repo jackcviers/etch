@@ -1,24 +1,23 @@
 (function() {
-    var root = this,
-        models = {},
+    var models = {},
         views = {},
         collections = {},
         etch = {};
 
     // selector to specify editable elements   
     etch.selector = '.editable';
+    
+    // Named sets of buttons to be specified on the editable element
+    // in the markup as "data-button-class"
+    etch.buttonClasses = {
+        'default': ['save'],
+        'all': ['bold', 'italic', 'underline', 'unordered-list', 'ordered-list', 'link', 'save'],
+        'title': ['bold', 'italic', 'underline', 'save'],
+        'fact': ['bold', 'italic', 'underline', 'link', 'save'],
+        'test': ['bold', 'image', 'save']
+    }
 
-    models.Editor = Backbone.Model.extend({
-        // Named sets of buttons to be specified on the editable element
-        // in the markup as "data-button-class"
-        buttonClasses: {
-            'default': ['save'],
-            'all': ['bold', 'italic', 'underline', 'unordered-list', 'ordered-list', 'link', 'save'],
-            'title': ['bold', 'italic', 'underline', 'save'],
-            'fact': ['bold', 'italic', 'underline', 'link', 'save'],
-            'test': ['bold', 'image', 'save']
-        }
-    });
+    models.Editor = Backbone.Model;
 
     views.Editor = Backbone.View.extend({
         initialize: function() {
@@ -74,7 +73,7 @@
         setButtonClass: function() {
             var editorModel = this.model;
             var buttonClass = editorModel.get('editable').attr('data-button-class') || 'default';
-            editorModel.set({ buttons: editorModel.buttonClasses[buttonClass] });
+            editorModel.set({ buttons: etch.buttonClasses[buttonClass] });
         },
 
         changeButtons: function() {
