@@ -2,45 +2,18 @@
     var root = this,
         models = {},
         views = {},
-        collections = {};
+        collections = {},
+        etch = {};
 
-    
-        
-    $.fn.etchInstantiate = function(options, cb) {
-        return this.each(function() {
-            var $el = $(this);
-            options || (options = {});
-
-            settings = {
-                el: this,
-                attrs: {}
-            }
-
-            _.extend(settings, options);
-
-            var model = new models[settings.classType](settings.attrs, settings);
-
-            // initialize a view is there is one
-            if (_.isFunction(views[settings.classType])) {
-                var view = new views[settings.classType]({model: model, el: this, tagName: this.tagName});
-            }
-           
-            // stash the model and view on the elements data object
-            $el.data({model: model});
-            $el.data({view: view});
-
-            if (_.isFunction(cb)) {
-                cb({model: model, view: view});
-            }
-        });
-    }
+    // selector to specify editable elements   
+    etch.selector = '.editable';
 
     models.Editor = Backbone.Model.extend({
         // Named sets of buttons to be specified on the editable element
         // in the markup as "data-button-class"
         buttonClasses: {
             'default': ['save'],
-            'all': ['bold', 'italic', 'underline', 'unordered-list', 'ordered-list', 'image', 'link', 'cite', 'save'],
+            'all': ['bold', 'italic', 'underline', 'unordered-list', 'ordered-list', 'link', 'save'],
             'title': ['bold', 'italic', 'underline', 'save'],
             'fact': ['bold', 'italic', 'underline', 'link', 'save'],
             'test': ['bold', 'image', 'save']
@@ -88,7 +61,7 @@
             var $editable = this.model.get('editable');
             var callback = function(e) {
                 var range = window.getSelection().getRangeAt(0);
-                if (e.keyCode === $.ui.keyCode.BACKSPACE) {
+                if (e.keyCode === 8) {
                     if (range.collapsed && inOnlyChildChain(range.commonAncestorContainer, $editable[0]) && range.startOffset === 0) {
                         e.preventDefault();
                     }
@@ -117,7 +90,7 @@
                 view.$el.append($buttonEl);
             });
             
-            $(this.el).show('fade', 'fast');
+            $(this.el).show('fast');
         },
 
         changePosition: function() {
@@ -251,7 +224,8 @@
         }
     });
 
-    var etch =  {
+    // tack on models, views, etc... as well as init function
+    _.extend(etch, {
         models: models,
         views: views,
         collections: collections,
@@ -260,11 +234,12 @@
         // you use to initialize editing 
         editableInit: function(e) {
             e.stopPropagation();
-            var $editable = $(e.srcElement).findEditable();
+            var $editable = $(e.srcElement).etchFindEditable();
             $editable.attr('contenteditable', true);
 
             // if the editor isn't already built, build it
             var $editor = $('.editor-panel');
+            var editorModel = $editor.data('model');
             if (!$editor.size()) {
                 $editor = $('<div class="editor-panel">');
                 var editorAttrs = { editable: $editable, editableModel: this.model };
@@ -306,8 +281,44 @@
 
             editorModel.set({position: {x: e.pageX - 15, y: e.pageY - 80}});
         }
-    };
+    });
 
+    // jquery helper functions
+    $.fn.etchInstantiate = function(options, cb) {
+        return this.each(function() {
+            var $el = $(this);
+            options || (options = {});
+
+            settings = {
+                el: this,
+                attrs: {}
+            }
+
+            _.extend(settings, options);
+
+            var model = new models[settings.classType](settings.attrs, settings);
+
+            // initialize a view is there is one
+            if (_.isFunction(views[settings.classType])) {
+                var view = new views[settings.classType]({model: model, el: this, tagName: this.tagName});
+            }
+           
+            // stash the model and view on the elements data object
+            $el.data({model: model});
+            $el.data({view: view});
+
+            if (_.isFunction(cb)) {
+                cb({model: model, view: view});
+            }
+        });
+    }
+
+    $.fn.etchFindEditable = function() {
+        return this.each(function() {
+            $el = $(this);
+            return $el.is(etch.selector) ? $el : $el.closest(etch.selector);
+        });
+    }
     
     window.etch = etch;
 })();
