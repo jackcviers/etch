@@ -314,10 +314,8 @@
     }
 
     $.fn.etchFindEditable = function() {
-        return this.each(function() {
-            $el = $(this);
-            return $el.is(etch.selector) ? $el : $el.closest(etch.selector);
-        });
+        $el = $(this);
+        return $el.is(etch.selector) ? $el : $el.closest(etch.selector);
     }
     
     window.etch = etch;
