@@ -1,5 +1,5 @@
 /* === Editor === */
-.editor-panel { display: none; padding: 5px; position: absolute; z-index: 500;
+.editor-panel { display: none; padding: 5px; position: absolute; z-index: 5000;
     background: #dadada; border: 1px solid #bdbdbd; color: #535353; text-shadow: 0 1px 0 #fff;
     background-image: -moz-linear-gradient(center bottom, #ccc 0%, #ddd 100%);
     background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#ddd), to(#ccc));

@@ -61,7 +61,7 @@
             var callback = function(e) {
                 var range = window.getSelection().getRangeAt(0);
                 if (e.keyCode === 8) {
-                    if (range.collapsed && inOnlyChildChain(range.commonAncestorContainer, $editable[0]) && range.startOffset === 0) {
+                    if (range.collapsed && range.startOffset === 0) {
                         e.preventDefault();
                     }
                 }
