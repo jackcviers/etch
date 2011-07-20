@@ -1,0 +1,111 @@
+.section { border: 1px solid #fff; padding: 18px 21px; margin-bottom: 7px; clear: both; position: relative; overflow: visible !important; z-index: 10000;
+/*    background: -moz-linear-gradient(top, #FFF 0%, #FFF 80%, #F2F2F2 100%); /* firefox */
+/*    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#FFF), color-stop(80%,#FFF), color-stop(100%,#F2F2F2)); /* webkit */
+    background: #fff;
+    -webkit-box-shadow: 0 0 5px rgba(0,0,0,.1); -moz-box-shadow: 0 0 5px rgba(0,0,0,.1); box-shadow: 0 0 5px rgba(0,0,0,.1);
+    -webkit-border-radius: 3px; -moz-border-radius: 3px; border-radius: 3px;
+}
+.section:after { content: "."; display: block; clear: both; visibility: hidden; line-height: 0; height: 0; }
+.section .inner-pane { border: 1px solid #e6e6e6; background: #f5f5f5; padding: 15px; }
+.section .inner-pane:after { content: "."; display: block; clear: both; visibility: hidden; line-height: 0; height: 0; }
+.section a { text-decoration: none; }
+
+/*=== Link List Module ===*/
+.link-list { list-style-type: none; }
+.link-list li { margin: 0; }
+.link-list a { color: #999; }
+.link-list a:hover { color: #3b6eae; }
+.link-list.inline li{ display: inline; }
+
+/*=== Page Tabs Module ===*/
+/* requires .link-list */
+.tabs { margin: 0; }
+.tabs li { margin-right: 25px; display: inline; /*padding-bottom: 10px;*/ }
+.sidebar .tabs li { margin-right: 15px; }
+.tabs li.current a { color: #3b6eae; }
+
+/*=== Image Tools ===*/
+.image-tools { position: absolute; display: none; z-index: 5000; }
+.image-tools .buttons { background: rgba(0,0,0,.5); padding: 4px; overflow: hidden; width: auto; display: inline-block;
+        -webkit-border-radius: 5px; -moz-border-radius: 5px; border-radius: 5px; }
+
+.image-tools .editor-button { border-color: #666; }
+.image-tools .editor-button span { background-image: url('images/etch/image_tools_icons.png'); }
+
+.image-tools .left span { background-position: 0 0; }
+.image-tools .center span { background-position: -31px 0; }
+.image-tools .right span { background-position: -62px 0; }
+.image-tools .delete span { background-position: -93px 0; }
+
+/*=== Image Uploader ===*/
+.image-uploader { position: fixed; left: 50%; top: 35%; width: 557px; margin-left: -290px; z-index: 1000;
+    -webkit-box-shadow: 0 0 5px rgba(0,0,0,.5);  }
+.image-uploader input[type=text] { padding: 5px; border: 1px solid #ddd; }
+.image-uploader .web-search-upload,
+.image-uploader .url-upload { display: none; }
+.image-uploader label { display: block; }
+
+.image-uploader input[type=text] { width: 200px; padding: 7px;}
+.image-uploader .gallery-pane { margin: 15px 0 0 -11px; }
+.image-uploader .gallery-pane .image-wrap:hover { outline: 3px solid #3b6eae; }
+.image-uploader .gallery-pane .media { overflow: visible; }
+.image-uploader .arrows { display: inline-block; }
+.image-uploader a.cancel { float: right; }
+
+
+/*=== Image Cropper ===*/
+
+.image-cropper { position: fixed; left: 50%; top: 50%; margin-left: -540px; margin-top: -238px; height: 435px; width: 1045px; z-index: 1000; }
+.image-cropper .crop-section { width: 430px; float: left; border-right: 1px solid #ddd; padding-right: 20px; margin-right: 20px; text-align: center; }
+.image-cropper .aspect-links { margin-bottom: 15px; }
+.image-cropper .raw-image-wrapper { overflow: hidden; display: inline-block; }
+.image-cropper .crop-size-wrapper { width: 132px; height: 132px; border: 1px solid #ddd; overflow: hidden; float: left; margin-right: 10px; }
+.image-cropper .crop-preview-wrapper { height: 400px; overflow: hidden; position: relative; color: #666; width: 570px; }
+.image-cropper .crop-preview-wrapper:after { display: block; content: ''; width: 100%; height: 30px; position: absolute; bottom: 0;
+    background: -moz-linear-gradient(top, rgba(255,255,255,0) 0%, rgba(255,255,255,.9) 80%, #fff 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(255,255,255,0)), color-stop(80%,rgba(255,255,255,.9)), color-stop(100%,rgba(255,255,255,1)));
+}
+.image-cropper .crop-size-wrapper { margin: 5px 10px 0 0; }
+.image-cropper .aspect-links .button { color: #fff; }
+.image-cropper .cancel { float: right; }
+.image-cropper .crop-dimensions { position: absolute; margin: 3px; background: rgba(0,0,0,.5); border-radius: 5px; color: #fff; padding: 0 5px; text-shadow: 0 0 3px rgba(0,0,0,.5)}
+.image-cropper .natural-dimensions { color: #999; }
+
+/*=== Gallery ===*/
+.gallery .tabs { overflow: hidden; position: relative; bottom: -1px; z-index: 100; }
+.gallery .tabs .current { background: url('images/mpages/grey_tab_arrow.png') bottom center no-repeat; }
+.gallery .media { width: 124px; height: 155px; float: left; margin: 0 0 10px 10px; font-size: 11px; line-height: 1.2;  }
+.gallery .media-wrap { margin: 0 0 5px 0; position: relative; height: 94px; }
+.gallery .media-wrap .image-wrap { position: relative; max-height: 94px;  overflow: hidden; *zoom: 1; }
+.gallery a.media-source { border: none; }
+.gallery .play-icon { position: absolute; bottom: 5px; left: 5px; height: 18px; width: 18px; background: url('images/mpages/video_play_icon.png'); }
+.gallery .media-wrap img { width: 120px; }
+
+.gallery .gallery-container { overflow: hidden; *zoom: 1; padding: 15px 15px 15px 5px; border: 1px solid #e6e6e6; background: #f5f5f5; }
+
+.gallery .media-content { padding: 0 5px; }
+.gallery .gallery-pane .head { line-height: 1.3; margin-bottom: 5px; overflow: hidden; *zoom:1; }
+.gallery .arrows { float: right; margin: 0 20px 0 0; }
+
+/*=== Media Module ===*/
+.media { overflow: hidden; *zoom: 1; }
+.media .media-wrap { float: left; margin-right: 15px; }
+/*.media .media-wrap a { border: 1px solid #e6e6e6; padding: 1px; display: block; background-color: #fff; }*/
+.media .media-wrap img { display: block; border: 1px solid #e6e6e6; padding: 1px; background-color: #fff; }
+.media .media-content { overflow: hidden; *zoom: 1; }
+.media .body p { margin-bottom: 0; }
+.media .head,
+.media .foot { font-size: 11px; color: #999; }
+
+/*=== Arrows ===*/
+.arrows .arrow { display: block; height: 14px; width: 9px;  }
+.arrows .left-arrow { background: url('images/etch/arrow_left.png') }
+.arrows .right-arrow { background: url('images/etch/arrow_right.png') }
+
+.arrows .left-arrow,
+.arrows .right-arrow { float: left; margin-left: 10px; }
+
+/*=== Images ===*/
+img.float-right { display: block; float: right; margin: 5px 0 0 10px; }
+img.float-left { display: block; float: left; margin: 5px 10px 0 0; }
+img.centered { float: none; display: block; margin: 5px auto 5px auto; }

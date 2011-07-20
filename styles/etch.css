@@ -36,50 +36,5 @@
 .editor-panel .cite span { background-position: -330px 0; }
 .editor-panel .heading span { background-position: -360px 0; }
 
+.editable:after { content: "."; display: block; clear: both; visibility: hidden; line-height: 0; height: 0; }
 
-/*=== Image Tools ===*/
-.image-tools { position: absolute; display: none; }
-.image-tools .buttons { background: rgba(0,0,0,.5); padding: 4px; overflow: hidden; width: auto; display: inline-block;
-        -webkit-border-radius: 5px; -moz-border-radius: 5px; border-radius: 5px; }
-
-.image-tools .editor-button { border-color: #666; }
-.image-tools .editor-button span { background-image: url('images/etch/image_tools_icons.png'); }
-
-.image-tools .left span { background-position: 0 0; }
-.image-tools .center span { background-position: -31px 0; }
-.image-tools .right span { background-position: -62px 0; }
-.image-tools .delete span { background-position: -93px 0; }
-
-/*=== Image Uploader ===*/
-.image-uploader { position: fixed; left: 50%; top: 35%; width: 557px; margin-left: -290px; z-index: 1000;
-    -webkit-box-shadow: 0 0 5px rgba(0,0,0,.5);  }
-.image-uploader input[type=text] { padding: 5px; border: 1px solid #ddd; }
-.image-uploader .web-search-upload,
-.image-uploader .url-upload { display: none; }
-.image-uploader label { display: block; }
-
-.image-uploader input[type=text] { width: 200px; padding: 7px;}
-.image-uploader .gallery-pane { margin: 15px 0 0 -11px; }
-.image-uploader .gallery-pane .image-wrap:hover { outline: 3px solid #3b6eae; }
-.image-uploader .gallery-pane .media { overflow: visible; }
-.image-uploader .arrows { display: inline-block; }
-.image-uploader a.cancel { float: right; }
-
-
-/*=== Image Cropper ===*/
-
-.image-cropper { position: fixed; left: 50%; top: 50%; margin-left: -540px; margin-top: -238px; height: 435px; width: 1045px; z-index: 1000; }
-.image-cropper .crop-section { width: 430px; float: left; border-right: 1px solid #ddd; padding-right: 20px; margin-right: 20px; text-align: center; }
-.image-cropper .aspect-links { margin-bottom: 15px; }
-.image-cropper .raw-image-wrapper { overflow: hidden; display: inline-block; }
-.image-cropper .crop-size-wrapper { width: 132px; height: 132px; border: 1px solid #ddd; overflow: hidden; float: left; margin-right: 10px; }
-.image-cropper .crop-preview-wrapper { height: 400px; overflow: hidden; position: relative; color: #666; width: 570px; }
-.image-cropper .crop-preview-wrapper:after { display: block; content: ''; width: 100%; height: 30px; position: absolute; bottom: 0;
-    background: -moz-linear-gradient(top, rgba(255,255,255,0) 0%, rgba(255,255,255,.9) 80%, #fff 100%);
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(255,255,255,0)), color-stop(80%,rgba(255,255,255,.9)), color-stop(100%,rgba(255,255,255,1)));
-}
-.image-cropper .crop-size-wrapper { margin: 5px 10px 0 0; }
-.image-cropper .aspect-links .button { color: #fff; }
-.image-cropper .cancel { float: right; }
-.image-cropper .crop-dimensions { position: absolute; margin: 3px; background: rgba(0,0,0,.5); border-radius: 5px; color: #fff; padding: 0 5px; text-shadow: 0 0 3px rgba(0,0,0,.5)}
-.image-cropper .natural-dimensions { color: #999; }

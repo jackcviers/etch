@@ -2,12 +2,104 @@
     var models = window.etch.models,
         views = window.etch.views,
         collections = window.etch.collections;
+
+    etch.defaultImageSearch = 'dogs';
+
+    var imageUploaderTemplate = '\
+        <a class="section-delete" href="#"></a>\
+        <div class="head">\
+            <ul class="link-list tabs">\
+                <li><a href="#" data-pane="file-upload">Upload</a></li>\
+                <li><a href="#" data-pane="web-search-upload">Web Search</a></li>\
+                <li><a href="#" data-pane="url-upload">Url</a></li>\
+            </ul>\
+        </div>\
+        <div class="body">\
+            <div class="inner-pane file-upload">\
+                <form action="/api/image/upload/" method="POST" enctype="multipart/form-data">\
+                    <input name="image-file" type="file" />\
+                </form>\
+            </div>\
+            <div class="inner-pane web-search-upload">\
+                <input type="text" class="web-search-terms" placeholder="Search Terms" name="search_terms" value="{{ terms }}" />\
+                <a href="#" class="web-search-submit button" value="Search">Search</a>\
+                <div class="arrows">\
+                    <a class="arrow prev left-arrow" href="#"></a>\
+                    <a class="arrow next right-arrow" href="#"></a>\
+                </div>\
+                <div class="gallery">\
+                </div>\
+            </div>\
+            <div class="inner-pane url-upload">\
+                <input type="text" placeholder="Image Url" class="image-url" name="image_url" />\
+                <a href="#" class="button url-upload-submit">Submit</a>\
+            </div>\
+        </div>\
+    ';
+ 
+ 
+    
+ 
+    var imageCropTemplate = '\
+        <a class="section-delete" href="#"></a>\
+        <div class="crop-section">\
+            <div class="natural-dimensions">Original Size: <span></span></div>\
+            <div class="raw-image-wrapper inner-pane">\
+                <img class="raw-image" src="{{ url }}" />\
+            </div>\
+        </div>\
+        <div class="preview-section">\
+            <ul class="link-list tabs aspect-links">\
+                <li><a href="#" class="aspect-banner">Banner</a></li>\
+                <li><a href="#" class="aspect-square">Square</a></li>\
+                <li><a href="#" class="aspect-portrait">Portrait</a></li>\
+                <li><a href="#" class="aspect-landscape">Landscape</a></li>\
+                <li><a href="#" class="button apply-crop">Crop</a></li>\
+            </ul>\
+            <div class="crop-preview-wrapper">\
+                <div class="crop-size-wrapper">\
+                    <div class="crop-dimensions"></div>\
+                    <img class="crop-preview" src="{{ url }}"/>\
+                </div>\
+                <p>\
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a diam lectus. Sed sit amet ipsum mauris. \
+                    Maecenas congue ligula ac quam viverra nec consectetur ante hendrerit. Donec et mollis dolor. \
+                    Praesent et diam eget libero egestas mattis sit amet vitae augue. Nam tincidunt congue enim, ut porta lorem lacinia consectetur. \
+                    Donec ut libero sed arcu vehicula ultricies a non tortor. Lorem ipsum dolor sit amet, consectetur adipiscing elit. \
+                    Aenean ut gravida lorem. Ut turpis felis, pulvinar a semper sed, adipiscing id dolor. Pellentesque auctor nisi id magna consequat\
+                    sagittis. Curabitur dapibus enim sit amet elit pharetra tincidunt feugiat nisl imperdiet. Ut convallis libero in urna ultrices \
+                    accumsan. Donec sed odio eros. Donec viverra mi quis quam pulvinar at malesuada arcu rhoncus. Cum sociis natoque penatibus et \
+                    magnis dis parturient montes, nascetur ridiculus mus. In rutrum accumsan ultricies. Mauris vitae nisi at sem facilisis semper \
+                    ac in est.\
+                </p>\
+                <p>\
+                    Curabitur dapibus enim sit amet elit pharetra tincidunt feugiat nisl imperdiet. Ut convallis libero in urna ultrices \
+                    accumsan. Donec sed odio eros. Donec viverra mi quis quam pulvinar at malesuada arcu rhoncus. Cum sociis natoque penatibus et \
+                    magnis dis parturient montes, nascetur ridiculus mus. In rutrum accumsan ultricies. Mauris vitae nisi at sem facilisis semper \
+                    ac in est.  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a diam lectus. Sed sit amet ipsum mauris. \
+                    Maecenas congue ligula ac quam viverra nec consectetur ante hendrerit. Donec et mollis dolor. \
+                    Praesent et diam eget libero egestas mattis sit amet vitae augue. Nam tincidunt congue enim, ut porta lorem lacinia consectetur. \
+                    Donec ut libero sed arcu vehicula ultricies a non tortor.\
+                </p>\
+            </div>\
+        </div>\
+    ';
+
+    var imageToolsTemplate = '\
+        <div class="image-tools">\
+            <div class="buttons">\
+                <a class="editor-button left" title="Left" href="#"><span></span></a>\
+                <a class="editor-button center" title="Center" href="#"><span></span></a>\
+                <a class="editor-button right" title="Right" href="#"><span></span></a>\
+                <a class="editor-button delete" title="Delete" href="#"><span></span></a>\
+            </div>\
+        </div>\
+    ';
         
     models.ImageUploader = Backbone.Model.extend({
         defaults: {
             index: 0,
-            slug: jsonVars.page_slug,
-            terms: jsonVars.page_slug
+            terms: etch.defaultImageSearch
         }
     });
     
@@ -20,7 +112,7 @@
         
         className: 'section image-uploader',
         
-        template: _.template($('.image-uploader-template').html()),
+        template: _.template(imageUploaderTemplate),
         
         events: {
             'click .tabs a': 'switchTab',
@@ -64,7 +156,7 @@
                     view.$('.gallery').html($(data.pane));
                 },
                 error: function(data) {
-                    $('body').notify({type: 'error', message: data.responseText, timeOut: 5000});
+                    $('body').etchNotify({type: 'error', message: data.responseText, timeOut: 5000});
                 }
             }
             
@@ -196,7 +288,7 @@
         
         className: 'section image-cropper',
         
-        template: _.template($('.image-crop-template').html()),
+        template: _.template(imageCropTemplate),
 
         events: {
             'click .aspect-banner': 'aspectBanner',
@@ -362,10 +454,10 @@
         
         template: _.template('<img src="{{ url }}" />'),
         
-        toolsTemplate: _.template($('.image-tools-template').html()),
+        toolsTemplate: _.template(imageToolsTemplate),
         
         events: {
-            'mouseover': 'showTools',
+            'mouseenter': 'showTools',
         },
         
         //  I wasn't sure if I wanted to break these tools off into its own model
@@ -437,4 +529,36 @@
             return this
         }
     });
+
+    $.fn.etchNotify = function(options){
+        var settings = {
+            type: 'alert',   // type should equal 'error', 'alert', 'loading', or 'success'
+            message: '',
+            timeOut: null,   // time to display, in ms
+            effect: 'blind' // effect for jQuery show() method
+        }
+
+        $.extend(settings, options);
+
+        return this.each(function(){
+            var $notify = $(this).find('.notify').first();
+
+            clearTimeout($notify.data('notifyTimeoutId'));
+            $notify.stop(true, true);
+            $notify.removeClass('error loading alert success');
+            $notify.html(settings.message).addClass(settings.type);
+
+            //for some reason, using :hidden or :visible doesn't work here.
+            //we have to directly look at the css display property
+            if ($notify.is(':hidden')) {
+                $notify.show(settings.effect);
+            }
+
+            if (settings.timeOut) {
+                $notify.data('notifyTimeoutId', setTimeout(function() { $notify.hide(settings.effect); }, settings.timeOut));
+            }
+        });
+    }
+
+
 })();

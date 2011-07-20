@@ -4,6 +4,12 @@
         collections = {},
         etch = {};
 
+   // underscore template languate settings
+    _.templateSettings = {
+      interpolate : /\{\{(.+?)\}\}/g, // {{ var }}
+      evaluate: /\{\%(.+?)\%\}/g // {% expression %}
+    }; 
+
     // selector to specify editable elements   
     etch.selector = '.editable';
     
