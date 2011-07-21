@@ -9,7 +9,7 @@
         <a class="section-delete" href="#"></a>\
         <div class="head">\
             <ul class="link-list tabs">\
-                <li><a href="#" data-pane="file-upload">Upload</a></li>\
+                <li class="current"><a href="#" data-pane="file-upload">Upload</a></li>\
                 <li><a href="#" data-pane="web-search-upload">Web Search</a></li>\
                 <li><a href="#" data-pane="url-upload">Url</a></li>\
             </ul>\
@@ -182,7 +182,7 @@
         
         navigateImages: function(e) {
             e.preventDefault();
-            var difference = $(e.srcElement).hasClass('prev') ? -1 : 1;
+            var difference = $(e.target).hasClass('prev') ? -1 : 1;
             this.model.set({'index': this.model.get('index') + difference});
         },
         
@@ -205,7 +205,7 @@
         
         gallerySubmit: function(e) {
             e.preventDefault();
-            var url = $(e.srcElement).closest('a').attr('href');
+            var url = $(e.target).closest('a').attr('href');
             this.uploadImage(url)
         },
                 
@@ -258,7 +258,12 @@
         
         switchTab: function(e) {
             e.preventDefault();
-            var paneClass = $(e.srcElement).attr('data-pane');
+            $anchor = $(e.target);
+            $tab = $anchor.parent('li');
+            $tabs = $tab.add($tab.siblings());
+            $tabs.removeClass('current');
+            $tab.addClass('current');
+            var paneClass = $anchor.attr('data-pane');
             this.$('.body .inner-pane').hide();
             this.$('.'+ paneClass).show();
             if (paneClass === 'web-search-upload' && !this.$('.gallery').children().size()) {
