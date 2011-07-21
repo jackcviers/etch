@@ -36,5 +36,4 @@
 .editor-panel .cite span { background-position: -330px 0; }
 .editor-panel .heading span { background-position: -360px 0; }
 
-.editable:after { content: "."; display: block; clear: both; visibility: hidden; line-height: 0; height: 0; }
 
