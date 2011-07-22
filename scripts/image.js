@@ -5,8 +5,15 @@
 
     etch.defaultImageSearch = 'dogs';
 
+    etch.aspectPresets = {
+        'banner': {aspectRatio: 4/1, previewSize: {x: 559, y: 140}},
+        'portrait': {aspectRatio: 3/4, previewSize: {x: 130, y: 174}},
+        'landscape': {aspectRatio: 4/3, previewSize: {x: 176, y: 132}},
+        'square': {aspectRatio: 1, previewSize: {x: 132, y: 132}}
+    };
+
     var imageUploaderTemplate = '\
-        <a class="section-delete" href="#"></a>\
+        <a class="etch-section-delete" href="#"></a>\
         <div class="head">\
             <ul class="link-list tabs">\
                 <li class="current"><a href="#" data-pane="file-upload">Upload</a></li>\
@@ -37,11 +44,8 @@
         </div>\
     ';
  
- 
-    
- 
     var imageCropTemplate = '\
-        <a class="section-delete" href="#"></a>\
+        <a class="etch-section-delete" href="#"></a>\
         <div class="crop-section">\
             <div class="natural-dimensions">Original Size: <span></span></div>\
             <div class="raw-image-wrapper inner-pane">\
@@ -50,10 +54,14 @@
         </div>\
         <div class="preview-section">\
             <ul class="link-list tabs aspect-links">\
-                <li><a href="#" class="aspect-banner">Banner</a></li>\
+                {% _.each(etch.aspectPresets, function(value, key) { %}\
+                    <li><a href="#" class="aspect-preset" data-aspect="{{ key }}">{{ key }}</a></li>\
+                {% }); %}\
+                <!--\
                 <li><a href="#" class="aspect-square">Square</a></li>\
                 <li><a href="#" class="aspect-portrait">Portrait</a></li>\
                 <li><a href="#" class="aspect-landscape">Landscape</a></li>\
+                -->\
                 <li><a href="#" class="button apply-crop">Crop</a></li>\
             </ul>\
             <div class="crop-preview-wrapper">\
@@ -110,14 +118,14 @@
             this.model.bind('change:terms', this.imageSearch);
         },
         
-        className: 'section image-uploader',
+        className: 'etch-section image-uploader',
         
         template: _.template(imageUploaderTemplate),
         
         events: {
             'click .tabs a': 'switchTab',
             'click .url-upload-submit': 'urlSubmit',
-            'click .section-delete': 'closeWindow',
+            'click .etch-section-delete': 'closeWindow',
             'click .web-search-submit': 'webSearch',
             'click .arrow': 'navigateImages',
             'click .gallery img': 'gallerySubmit',
@@ -239,6 +247,14 @@
             $(this.el).remove();
             $('body').append(view.render().el);
     
+
+            var aspects = []
+            _.each(etch.aspectPresets, function(value, key) {
+               aspects.push(etch.aspectPresets[key]);
+            });
+
+            var defaultAspect = aspects[0]
+
             // wait for the image to load and then
             // initialize Jcrop.  otherwise the image will have size 0 0.
             view.$('.raw-image').load(function() {
@@ -248,10 +264,12 @@
                     onChange: view.updateCoords,
                     onSelect: view.updateCoords,
                 });
-                cropApi.setSelect([0,0,132,132]);
-                cropApi.setOptions({aspectRatio: 1});
-                view.model.set({'previewSize': {x: 132, y: 132}});
+
+                cropApi.setSelect([0, 0, defaultAspect.previewSize.x, defaultAspect.previewSize.y]);
+                cropApi.setOptions({aspectRatio: defaultAspect.aspectRatio});
+                view.model.set({'previewSize': defaultAspect.previewSize});
                 view.model.set({cropApi: cropApi});
+                view.updateCoords({x: 0, y: 0, w: defaultAspect.previewSize.x, h: defaultAspect.previewSize.y});
                 view.model._imageCallback = cb;
             });
         },
@@ -291,17 +309,18 @@
             this.model.bind('change:previewSize', this.changePreviewSize);
         },
         
-        className: 'section image-cropper',
+        className: 'etch-section image-cropper',
         
         template: _.template(imageCropTemplate),
 
         events: {
-            'click .aspect-banner': 'aspectBanner',
-            'click .aspect-square': 'aspectSquare',
-            'click .aspect-portrait': 'aspectPortrait',
-            'click .aspect-landscape': 'aspectLandscape',
+            // 'click .aspect-banner': 'aspectBanner',
+            // 'click .aspect-square': 'aspectSquare',
+            // 'click .aspect-portrait': 'aspectPortrait',
+            // 'click .aspect-landscape': 'aspectLandscape',
+            'click .aspect-preset': 'setAspect',
             'click .apply-crop': 'applyCrop',
-            'click a.section-delete': 'closeWindow'
+            'click a.etch-section-delete': 'closeWindow'
         },
 
         closeWindow: function(e) {
@@ -309,36 +328,19 @@
             this.remove();
         },
 
-        setAspect: function(options) {
+        setAspect: function(e) {
+            e && e.preventDefault();
+            var preset = etch.aspectPresets[$(e.target).attr('data-aspect')];
+            
             var cropApi = this.model.get('cropApi');
             cropApi.setOptions({
-                aspectRatio: options.aspectRatio
+                aspectRatio: preset.aspectRatio
             });
 
-            this.$('.crop-size-wrapper').resizable('option', 'aspectRatio', options.aspectRatio);
+            this.$('.crop-size-wrapper').resizable('option', 'aspectRatio', preset.aspectRatio);
             
-            this.model.set({'previewSize': options.previewSize});
+            this.model.set({'previewSize': preset.previewSize});
             this.showPreview(this.model.get('coords'));
-        },
-        
-        aspectBanner: function(e) {
-            e.preventDefault();
-            this.setAspect({aspectRatio: 4/1, previewSize: {x: 559, y: 140}});
-        },
-        
-        aspectSquare: function(e) {
-            e.preventDefault();
-            this.setAspect({aspectRatio: 1, previewSize: {x: 132, y: 132}});
-        },
-        
-        aspectPortrait: function(e) {
-            e.preventDefault();
-            this.setAspect({aspectRatio: 3/4, previewSize: {x: 130, y: 174}});
-        },
-        
-        aspectLandscape: function(e) {
-            e.preventDefault();
-            this.setAspect({aspectRatio: 4/3, previewSize: {x: 176, y: 132}});
         },
 
         previewResize: function(newSize) {
@@ -358,7 +360,7 @@
             var view = this;
             var coords = this.model.get('coords');
             var previewSize = this.model.get('previewSize');
-            var size = [previewSize.x, previewSize.y];
+            var size = [Math.floor(previewSize.x), Math.floor(previewSize.y)];
 
             var attrs = {
                 image_requests: [{crop: [coords.x, coords.y, coords.x2, coords.y2], size: size}]
