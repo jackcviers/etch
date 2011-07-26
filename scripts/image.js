@@ -4,12 +4,13 @@
         collections = window.etch.collections;
 
     etch.defaultImageSearch = 'dogs';
+    etch.previewResizable = true;
 
     etch.aspectPresets = {
-        'banner': {aspectRatio: 4/1, previewSize: {x: 559, y: 140}},
-        'portrait': {aspectRatio: 3/4, previewSize: {x: 130, y: 174}},
         'landscape': {aspectRatio: 4/3, previewSize: {x: 176, y: 132}},
-        'square': {aspectRatio: 1, previewSize: {x: 132, y: 132}}
+        'portrait': {aspectRatio: 3/4, previewSize: {x: 130, y: 174}},
+        'square': {aspectRatio: 1, previewSize: {x: 132, y: 132}},
+        'banner': {aspectRatio: 4/1, previewSize: {x: 559, y: 140}}
     };
 
     var imageUploaderTemplate = '\
@@ -269,7 +270,12 @@
                 cropApi.setOptions({aspectRatio: defaultAspect.aspectRatio});
                 view.model.set({'previewSize': defaultAspect.previewSize});
                 view.model.set({cropApi: cropApi});
-                view.updateCoords({x: 0, y: 0, w: defaultAspect.previewSize.x, h: defaultAspect.previewSize.y});
+
+                // TODO: hacky.  triggering a click to make the image preview reset itself to the first preset
+                // fix this later when I have time to refactor this code
+                $('.aspect-links li a').first().click();
+                // view.updateCoords({x: 0, y: 0, w: defaultAspect.previewSize.x, h: defaultAspect.previewSize.y});
+
                 view.model._imageCallback = cb;
             });
         },
@@ -425,16 +431,21 @@
             var $rawImg = this.$('.raw-image');
             $rawImg.load(function() {
                 var $previewWrapper = view.$('.crop-size-wrapper');
-                $previewWrapper.resizable({
-                    aspectRatio: 1,
-                    maxWidth: 559,
-                	stop: function(e, ui) {
-                    	view.previewResize(ui.size);
-                    },
-                    resize: function(e, ui) {
-                        view.updateDimensions(ui.size)
-                    }
-                });
+
+                // controls whether the preview image can be resized
+                if (etch.previewResizable) {
+                    $previewWrapper.resizable({
+                        aspectRatio: 1,
+                        maxWidth: 559,
+                        stop: function(e, ui) {
+                            view.previewResize(ui.size);
+                        },
+                        resize: function(e, ui) {
+                            view.updateDimensions(ui.size)
+                        }
+                    });
+                }
+                
                 view.model.set({
                     rawImgSize: {x:$rawImg.outerWidth(), y:$rawImg.outerHeight()},
                     previewSize: {y: $previewWrapper.outerHeight(), x: $previewWrapper.outerWidth()}
