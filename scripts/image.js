@@ -263,7 +263,7 @@
                     boxHeight: 400,
                     boxWidth: 400,
                     onChange: view.updateCoords,
-                    onSelect: view.updateCoords,
+                    onSelect: view.updateCoords
                 });
 
                 cropApi.setSelect([0, 0, defaultAspect.previewSize.x, defaultAspect.previewSize.y]);
@@ -475,7 +475,7 @@
         toolsTemplate: _.template(imageToolsTemplate),
         
         events: {
-            'mouseenter': 'showTools',
+            'mouseenter': 'showTools'
         },
         
         //  I wasn't sure if I wanted to break these tools off into its own model
