@@ -55,26 +55,6 @@
             'click .cite': 'addCitation'
         },
         
-        changeEditable: function() {
-            this.setButtonClass();
-            this.preventWrapperDelete();
-        },
-
-        preventWrapperDelete: function() {
-            // check to see if the user is about to delete the p wrapper 
-            // out of the contenteditable prevent default if they do.
-            var $editable = this.model.get('editable');
-            var callback = function(e) {
-                var range = window.getSelection().getRangeAt(0);
-                if (e.keyCode === 8) {
-                    if (range.collapsed && range.startOffset === 0) {
-                        e.preventDefault();
-                    }
-                }
-            };
-            $editable.unbind('keydown.keepWrap');
-            $editable.bind('keydown.keepWrap', callback);
-        },
 
         setButtonClass: function() {
             var editorModel = this.model;
