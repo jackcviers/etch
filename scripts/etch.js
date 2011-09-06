@@ -55,6 +55,9 @@
             'click .cite': 'addCitation'
         },
         
+        changeEditable: function() {
+            this.setButtonClass();
+        },
 
         setButtonClass: function() {
             var editorModel = this.model;
