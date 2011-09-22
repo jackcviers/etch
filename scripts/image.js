@@ -16,7 +16,7 @@
     var imageUploaderTemplate = '\
         <a class="etch-section-delete" href="#"></a>\
         <div class="head">\
-            <ul class="link-list tabs">\
+            <ul class="link-list etch-tabs">\
                 <li class="current"><a href="#" data-pane="file-upload">Upload</a></li>\
                 <li><a href="#" data-pane="web-search-upload">Web Search</a></li>\
                 <li><a href="#" data-pane="url-upload">Url</a></li>\
@@ -30,7 +30,7 @@
             </div>\
             <div class="inner-pane web-search-upload">\
                 <input type="text" class="web-search-terms" placeholder="Search Terms" name="search_terms" value="{{ terms }}" />\
-                <a href="#" class="web-search-submit button" value="Search">Search</a>\
+                <a href="#" class="web-search-submit etch-button" value="Search">Search</a>\
                 <div class="arrows">\
                     <a class="arrow prev left-arrow" href="#"></a>\
                     <a class="arrow next right-arrow" href="#"></a>\
@@ -40,7 +40,7 @@
             </div>\
             <div class="inner-pane url-upload">\
                 <input type="text" placeholder="Image Url" class="image-url" name="image_url" />\
-                <a href="#" class="button url-upload-submit">Submit</a>\
+                <a href="#" class="etch-button url-upload-submit">Submit</a>\
             </div>\
         </div>\
     ';
@@ -54,7 +54,7 @@
             </div>\
         </div>\
         <div class="preview-section">\
-            <ul class="link-list tabs aspect-links">\
+            <ul class="link-list etch-tabs aspect-links">\
                 {% _.each(etch.aspectPresets, function(value, key) { %}\
                     <li><a href="#" class="aspect-preset" data-aspect="{{ key }}">{{ key }}</a></li>\
                 {% }); %}\
@@ -63,7 +63,7 @@
                 <li><a href="#" class="aspect-portrait">Portrait</a></li>\
                 <li><a href="#" class="aspect-landscape">Landscape</a></li>\
                 -->\
-                <li><a href="#" class="button apply-crop">Crop</a></li>\
+                <li><a href="#" class="etch-button apply-crop">Crop</a></li>\
             </ul>\
             <div class="crop-preview-wrapper">\
                 <div class="crop-size-wrapper">\
@@ -96,7 +96,7 @@
 
     var imageToolsTemplate = '\
         <div class="image-tools">\
-            <div class="buttons">\
+            <div class="etch-buttons">\
                 <a class="editor-button left" title="Left" href="#"><span></span></a>\
                 <a class="editor-button center" title="Center" href="#"><span></span></a>\
                 <a class="editor-button right" title="Right" href="#"><span></span></a>\
@@ -124,7 +124,7 @@
         template: _.template(imageUploaderTemplate),
         
         events: {
-            'click .tabs a': 'switchTab',
+            'click .etch-tabs a': 'switchTab',
             'click .url-upload-submit': 'urlSubmit',
             'click .etch-section-delete': 'closeWindow',
             'click .web-search-submit': 'webSearch',

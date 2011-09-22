@@ -22,13 +22,13 @@
 
 /*=== Page Tabs Module ===*/
 /* requires .link-list */
-.tabs { margin: 0; }
-.tabs li { margin-right: 25px; display: inline; /*padding-bottom: 10px;*/ }
-.tabs li.current a { color: #3b6eae; }
+.etch-tabs { margin: 0; }
+.etch-tabs li { margin-right: 25px; display: inline; /*padding-bottom: 10px;*/ }
+.etch-tabs li.current a { color: #3b6eae; }
 
 /*=== Image Tools ===*/
 .image-tools { position: absolute; display: none; z-index: 5000; }
-.image-tools .buttons { background: rgba(0,0,0,.5); padding: 4px; overflow: hidden; width: auto; display: inline-block;
+.image-tools .etch-buttons { background: rgba(0,0,0,.5); padding: 4px; overflow: hidden; width: auto; display: inline-block;
         -webkit-border-radius: 5px; -moz-border-radius: 5px; border-radius: 5px; }
 
 .image-tools .editor-button { border-color: #666; }
@@ -68,7 +68,7 @@
     background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(255,255,255,0)), color-stop(80%,rgba(255,255,255,.9)), color-stop(100%,rgba(255,255,255,1)));
 }
 .image-cropper .crop-size-wrapper { margin: 5px 10px 0 0; }
-.image-cropper .aspect-links .button { color: #fff; }
+.image-cropper .aspect-links .etch-button { color: #fff; }
 .image-cropper .cancel { float: right; }
 .image-cropper .crop-dimensions { position: absolute; margin: 3px; background: rgba(0,0,0,.5); border-radius: 5px; color: #fff; padding: 0 5px; text-shadow: 0 0 3px rgba(0,0,0,.5)}
 .image-cropper .natural-dimensions { color: #999; }
@@ -111,5 +111,26 @@
 img.float-right { display: block; float: right; margin: 5px 0 0 10px; }
 img.float-left { display: block; float: left; margin: 5px 10px 0 0; }
 img.centered { float: none; display: block; margin: 5px auto 5px auto; }
+
+/*=== Buttons ===*/
+.etch-button { background: #3b6eae; border: 1px solid #3165a4; color: #fff; padding: 5px 10px; margin: 0;
+    -webkit-border-radius: 3px; 
+    background: #4a7ebf;
+    text-shadow: 0 1px 0 rgba(0,0,0,.5);
+
+}
+.etch-button:hover { background: #5889cc; color: #fff; }
+
+.etch-button.ext { background: #fff; color: #3b6eae; border-color: #becada; text-shadow: none;  }
+.button.ext:hover { background: #f7f7f7; }
+.button.ext1 { -webkit-box-shadow: inset 0 0 2px rgba(255, 255, 255, .5); -moz-box-shadow: inset 0 0 2px rgba(255, 255, 255, .5); box-shadow: inset 0 0 2px rgba(255, 255, 255, .5); }
+.button.ext2 { display: block; background: #e5e5e5; border: 1px solid #bdbdbd; color: #535353; text-shadow: 0 1px 0 #fff;
+    text-align: center;
+    background-image: -moz-linear-gradient(center bottom, #cdcdcd 0%, #efefef 100%);
+    background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#EFEFEF), to(#cdcdcd));
+    -webkit-border-radius: 3px; -moz-border-radius: 3px; border-radius: 3px;
+    -webkit-box-shadow: inset 1px 0 0 #ededed, inset 0 1px 0 #ededed, inset -1px 0 0 #ededed, inset 0 -1px 0 #ededed; 
+}
+.button.ext2:hover { background: #eee; }
 
 
