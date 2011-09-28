@@ -15,60 +15,60 @@
 
     var imageUploaderTemplate = '\
         <a class="etch-section-delete" href="#"></a>\
-        <div class="head">\
-            <ul class="link-list etch-tabs">\
-                <li class="current"><a href="#" data-pane="file-upload">Upload</a></li>\
-                <li><a href="#" data-pane="web-search-upload">Web Search</a></li>\
-                <li><a href="#" data-pane="url-upload">Url</a></li>\
+        <div class="etch-head">\
+            <ul class="etch-link-list etch-tabs">\
+                <li class="etch-current"><a href="#" data-pane="etch-file-upload">Upload</a></li>\
+                <li><a href="#" data-pane="etch-web-search-upload">Web Search</a></li>\
+                <li><a href="#" data-pane="etch-url-upload">Url</a></li>\
             </ul>\
         </div>\
-        <div class="body">\
-            <div class="inner-pane file-upload">\
+        <div class="etch-body">\
+            <div class="etch-inner-pane etch-file-upload">\
                 <form action="/api/image/upload/" method="POST" enctype="multipart/form-data">\
                     <input name="image-file" type="file" />\
                 </form>\
             </div>\
-            <div class="inner-pane web-search-upload">\
-                <input type="text" class="web-search-terms" placeholder="Search Terms" name="search_terms" value="{{ terms }}" />\
-                <a href="#" class="web-search-submit etch-button" value="Search">Search</a>\
-                <div class="arrows">\
-                    <a class="arrow prev left-arrow" href="#"></a>\
-                    <a class="arrow next right-arrow" href="#"></a>\
+            <div class="etch-inner-pane etch-web-search-upload">\
+                <input type="text" class="etch-web-search-terms" placeholder="Search Terms" name="search_terms" value="{{ terms }}" />\
+                <a href="#" class="etch-web-search-submit etch-button" value="Search">Search</a>\
+                <div class="etch-arrows">\
+                    <a class="etch-arrow etch-prev etch-left-arrow" href="#"></a>\
+                    <a class="etch-arrow etch-next etch-right-arrow" href="#"></a>\
                 </div>\
-                <div class="gallery">\
+                <div class="etch-gallery">\
                 </div>\
             </div>\
-            <div class="inner-pane url-upload">\
-                <input type="text" placeholder="Image Url" class="image-url" name="image_url" />\
-                <a href="#" class="etch-button url-upload-submit">Submit</a>\
+            <div class="etch-inner-pane etch-url-upload">\
+                <input type="text" placeholder="Image Url" class="etch-image-url" name="image_url" />\
+                <a href="#" class="etch-button etch-url-upload-submit">Submit</a>\
             </div>\
         </div>\
     ';
  
     var imageCropTemplate = '\
         <a class="etch-section-delete" href="#"></a>\
-        <div class="crop-section">\
-            <div class="natural-dimensions">Original Size: <span></span></div>\
-            <div class="raw-image-wrapper inner-pane">\
-                <img class="raw-image" src="{{ url }}" />\
+        <div class="etch-crop-section">\
+            <div class="etch-natural-dimensions">Original Size: <span></span></div>\
+            <div class="etch-raw-image-wrapper etch-inner-pane">\
+                <img class="etch-raw-image" src="{{ url }}" />\
             </div>\
         </div>\
-        <div class="preview-section">\
-            <ul class="link-list etch-tabs aspect-links">\
+        <div class="etch-preview-section">\
+            <ul class="etch-link-list etch-tabs aspect-links">\
                 {% _.each(etch.aspectPresets, function(value, key) { %}\
-                    <li><a href="#" class="aspect-preset" data-aspect="{{ key }}">{{ key }}</a></li>\
+                    <li><a href="#" class="etch-aspect-preset" data-aspect="{{ key }}">{{ key }}</a></li>\
                 {% }); %}\
                 <!--\
-                <li><a href="#" class="aspect-square">Square</a></li>\
-                <li><a href="#" class="aspect-portrait">Portrait</a></li>\
-                <li><a href="#" class="aspect-landscape">Landscape</a></li>\
+                <li><a href="#" class="etch-aspect-square">Square</a></li>\
+                <li><a href="#" class="etch-aspect-portrait">Portrait</a></li>\
+                <li><a href="#" class="etch-aspect-landscape">Landscape</a></li>\
                 -->\
-                <li><a href="#" class="etch-button apply-crop">Crop</a></li>\
+                <li><a href="#" class="etch-button etch-apply-crop">Crop</a></li>\
             </ul>\
-            <div class="crop-preview-wrapper">\
-                <div class="crop-size-wrapper">\
-                    <div class="crop-dimensions"></div>\
-                    <img class="crop-preview" src="{{ url }}"/>\
+            <div class="etch-crop-preview-wrapper">\
+                <div class="etch-crop-size-wrapper">\
+                    <div class="etch-crop-dimensions"></div>\
+                    <img class="etch-crop-preview" src="{{ url }}"/>\
                 </div>\
                 <p>\
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a diam lectus. Sed sit amet ipsum mauris. \
@@ -95,13 +95,37 @@
     ';
 
     var imageToolsTemplate = '\
-        <div class="image-tools">\
+        <div class="etch-image-tools">\
             <div class="etch-buttons">\
-                <a class="editor-button left" title="Left" href="#"><span></span></a>\
-                <a class="editor-button center" title="Center" href="#"><span></span></a>\
-                <a class="editor-button right" title="Right" href="#"><span></span></a>\
-                <a class="editor-button delete" title="Delete" href="#"><span></span></a>\
+                <a class="etch-editor-button etch-left" title="Left" href="#"><span></span></a>\
+                <a class="etch-editor-button etch-center" title="Center" href="#"><span></span></a>\
+                <a class="etch-editor-button etch-right" title="Right" href="#"><span></span></a>\
+                <a class="etch-editor-button etch-delete" title="Delete" href="#"><span></span></a>\
             </div>\
+        </div>\
+    ';
+
+    var imagePaneTemplate = '\
+        <div class="etch-gallery-pane">\
+            {% _.each(images, function(image) { %}\
+                <div class="etch-media etch-selectable-element" {% if (image.id) { %}data-element-id="{{ image.id }}"{% } %} data-provider="{{ image.provider }}">\
+                    <div class="etch-media-wrap">\
+                        <a href="{{ image.direct_url }}" title="{{ image.alt_text }}">\
+                            <div class="etch-image-wrap">\
+                             <img src="{{ image.thumb_url }}" alt="{{ image.alt_text }}" />\
+                            </div>\
+                        </a>\
+                    </div>\
+                    <div class="media-content">\
+                        <div class="etch-body">\
+                            {{ image.title.slice(0,35) }}\
+                        </div>\
+                        <div class="etch-foot">\
+                            {{ image.width }} x {{ image.height }}\
+                        </div>\
+                    </div>\
+                </div>\
+            {% }); %}\
         </div>\
     ';
         
@@ -119,19 +143,19 @@
             this.model.bind('change:terms', this.imageSearch);
         },
         
-        className: 'etch-section image-uploader',
+        className: 'etch-section etch-image-uploader',
         
         template: _.template(imageUploaderTemplate),
         
         events: {
             'click .etch-tabs a': 'switchTab',
-            'click .url-upload-submit': 'urlSubmit',
+            'click .etch-url-upload-submit': 'urlSubmit',
             'click .etch-section-delete': 'closeWindow',
-            'click .web-search-submit': 'webSearch',
-            'click .arrow': 'navigateImages',
-            'click .gallery img': 'gallerySubmit',
-            'keypress .web-search-terms': 'termsKeypress',
-            'change .file-upload [name="image-file"]': 'uploadSubmit'
+            'click .etch-web-search-submit': 'webSearch',
+            'click .etch-arrow': 'navigateImages',
+            'click .etch-gallery img': 'gallerySubmit',
+            'keypress .etch-web-search-terms': 'termsKeypress',
+            'change .etch-file-upload [name="image-file"]': 'uploadSubmit'
         },
 
         closeWindow: function(e) {
@@ -141,7 +165,7 @@
 
         applyUploadForm: function() {
             // use jquery.form.ajaxForm to handle async file upload
-            this.$('.file-upload form').ajaxForm({
+            this.$('.etch-file-upload form').ajaxForm({
                 iframe: true,
                 success: this.uploadCallback
             });
@@ -149,11 +173,12 @@
         
         uploadSubmit: function(e) {
             e.preventDefault();
-            this.$('.file-upload form').submit();
+            this.$('.etch-file-upload form').submit();
         },
         
         imageSearch: function(options) {
             var view = this;
+            var template = _.template(imagePaneTemplate);
             var settings = {
                 provider: 'flickr',
                 search_terms: this.model.get('terms'),
@@ -162,10 +187,10 @@
                 row_count: 2,
                 cc_filter: 1,
                 success: function(data) {
-                    view.$('.gallery').html($(data.pane));
+                    view.$('.etch-gallery').html(template(data));
                 },
                 error: function(data) {
-                    $('body').etchNotify({type: 'error', message: data.responseText, timeOut: 5000});
+                    $('etch-body').etchNotify({type: 'error', message: data.responseText, timeOut: 5000});
                 }
             }
             
@@ -177,7 +202,8 @@
                 {name: 'result_index', value: settings.result_index},
                 {name: 'layout_position', value: settings.layout_position},
                 {name: 'row_count', value: settings.row_count},
-                {name: 'cc_filter', value: settings.cc_filter}
+                {name: 'cc_filter', value: settings.cc_filter},
+                {name: 'format', value: 'json'}
             ];
             
             $.ajax({
@@ -191,7 +217,7 @@
         
         navigateImages: function(e) {
             e.preventDefault();
-            var difference = $(e.target).hasClass('prev') ? -1 : 1;
+            var difference = $(e.target).hasClass('etch-prev') ? -1 : 1;
             this.model.set({'index': this.model.get('index') + difference});
         },
         
@@ -203,12 +229,12 @@
         
         webSearch: function(e) {
             e.preventDefault();
-            this.model.set({'terms': this.$('.web-search-terms').val(), 'index': 0});
+            this.model.set({'terms': this.$('.etch-web-search-terms').val(), 'index': 0});
         },
 
         urlSubmit: function(e) {
             e.preventDefault();
-            var url = this.$('.url-upload .image-url').val()
+            var url = this.$('.etch-url-upload .etch-image-url').val()
             this.uploadImage(url);
         },
         
@@ -246,7 +272,7 @@
             var model = new models.ImageCropper(attrs);
             var view = new views.ImageCropper({model: model});
             $(this.el).remove();
-            $('body').append(view.render().el);
+            $('etch-body').append(view.render().el);
     
 
             var aspects = []
@@ -258,8 +284,8 @@
 
             // wait for the image to load and then
             // initialize Jcrop.  otherwise the image will have size 0 0.
-            view.$('.raw-image').load(function() {
-                var cropApi = $.Jcrop('.image-cropper .raw-image', {
+            view.$('.etch-raw-image').load(function() {
+                var cropApi = $.Jcrop('.etch-image-cropper .etch-raw-image', {
                     boxHeight: 400,
                     boxWidth: 400,
                     onChange: view.updateCoords,
@@ -273,7 +299,7 @@
 
                 // TODO: hacky.  triggering a click to make the image preview reset itself to the first preset
                 // fix this later when I have time to refactor this code
-                $('.aspect-links li a').first().click();
+                $('.etch-aspect-links li a').first().click();
                 // view.updateCoords({x: 0, y: 0, w: defaultAspect.previewSize.x, h: defaultAspect.previewSize.y});
 
                 view.model._imageCallback = cb;
@@ -285,12 +311,12 @@
             $anchor = $(e.target);
             $tab = $anchor.parent('li');
             $tabs = $tab.add($tab.siblings());
-            $tabs.removeClass('current');
-            $tab.addClass('current');
+            $tabs.removeClass('etch-current');
+            $tab.addClass('etch-current');
             var paneClass = $anchor.attr('data-pane');
-            this.$('.body .inner-pane').hide();
+            this.$('.etch-body .etch-inner-pane').hide();
             this.$('.'+ paneClass).show();
-            if (paneClass === 'web-search-upload' && !this.$('.gallery').children().size()) {
+            if (paneClass === 'etch-web-search-upload' && !this.$('.etch-gallery').children().size()) {
                 this.imageSearch();
             }
         },
@@ -315,7 +341,7 @@
             this.model.bind('change:previewSize', this.changePreviewSize);
         },
         
-        className: 'etch-section image-cropper',
+        className: 'etch-section etch-image-cropper',
         
         template: _.template(imageCropTemplate),
 
@@ -324,8 +350,8 @@
             // 'click .aspect-square': 'aspectSquare',
             // 'click .aspect-portrait': 'aspectPortrait',
             // 'click .aspect-landscape': 'aspectLandscape',
-            'click .aspect-preset': 'setAspect',
-            'click .apply-crop': 'applyCrop',
+            'click .etch-aspect-preset': 'setAspect',
+            'click .etch-apply-crop': 'applyCrop',
             'click a.etch-section-delete': 'closeWindow'
         },
 
@@ -343,14 +369,14 @@
                 aspectRatio: preset.aspectRatio
             });
 
-            this.$('.crop-size-wrapper').resizable('option', 'aspectRatio', preset.aspectRatio);
+            this.$('.etch-crop-size-wrapper').resizable('option', 'aspectRatio', preset.aspectRatio);
             
             this.model.set({'previewSize': preset.previewSize});
             this.showPreview(this.model.get('coords'));
         },
 
         previewResize: function(newSize) {
-        	var $img = this.$('.crop-preview');
+        	var $img = this.$('.etch-crop-preview');
             var previewSize = this.model.get('previewSize');
             var marginRatio = newSize.width / previewSize.x;
             var mLeft = parseInt($img.css('margin-left'));
@@ -388,8 +414,8 @@
         },
         
         updateCoords: function(coords) {
-            var $cropPreviewImg = this.$('.crop-preview[src]');
-            var $cropSizeWrapper = this.$('.crop-size-wrapper');
+            var $cropPreviewImg = this.$('.etch-crop-preview[src]');
+            var $cropSizeWrapper = this.$('.etch-crop-size-wrapper');
             var yRatio = $cropPreviewImg.height() / $cropSizeWrapper.height();
             var xRatio = $cropPreviewImg.width() / $cropSizeWrapper.width();
 
@@ -407,7 +433,7 @@
             var imgWidth = this.model.get('rawImgSize').x;
             var imgHeight = this.model.get('rawImgSize').y;
             
-            this.$('.crop-preview').css({
+            this.$('.etch-crop-preview').css({
                 width: Math.round(xRatio * imgWidth),
                 height: Math.round(yRatio * imgHeight),
                 marginLeft: '-' + Math.round(xRatio * coords.x)+ 'px',
@@ -416,21 +442,21 @@
         },
 
         updateDimensions: function(size) {
-            this.$('.crop-dimensions').text(parseInt(size.width) +'x'+ parseInt(size.height));
+            this.$('.etch-crop-dimensions').text(parseInt(size.width) +'x'+ parseInt(size.height));
         },
         
         changePreviewSize: function() {
             var previewSize = this.model.get('previewSize');
-            this.$('.crop-size-wrapper').css({height: previewSize.y, width: previewSize.x});
+            this.$('.etch-crop-size-wrapper').css({height: previewSize.y, width: previewSize.x});
             this.updateDimensions({width: previewSize.x, height: previewSize.y});
         },
         
         render: function() {
             var view = this;
             $(this.el).html(this.template(this.model.toJSON()));
-            var $rawImg = this.$('.raw-image');
+            var $rawImg = this.$('.etch-raw-image');
             $rawImg.load(function() {
-                var $previewWrapper = view.$('.crop-size-wrapper');
+                var $previewWrapper = view.$('.etch-crop-size-wrapper');
 
                 // controls whether the preview image can be resized
                 if (etch.previewResizable) {
@@ -455,7 +481,7 @@
                 // display the images size
                 var height = $rawImg[0].naturalHeight
                 var width = $rawImg[0].naturalWidth
-                view.$('.natural-dimensions span').text(width +'x'+ height);
+                view.$('.etch-natural-dimensions span').text(width +'x'+ height);
             });
             
             return this;
@@ -484,7 +510,7 @@
             var view = this;
             $el = $(this.el);
             this.$tools = $(this.renderTools().tools);
-            $('body').append(this.$tools);
+            $('etch-body').append(this.$tools);
             this.$tools.css({
                 top: $el.offset().top,
                 left: $el.offset().left,
@@ -496,16 +522,16 @@
                 view.removeTools();
             });
             
-            this.$tools.find('.right').click(function(e) {
+            this.$tools.find('.etch-right').click(function(e) {
                 e.preventDefault();
                 var $el = $(view.el);
                 $el.removeClass();
-                $el.addClass('float-right');
+                $el.addClass('etch-float-right');
                 var editableModel = view.model.get('editableModel');
                 view.removeTools();
             });
             
-            this.$tools.find('.center').click(function(e) {
+            this.$tools.find('.etch-center').click(function(e) {
                 e.preventDefault();
                 var $el = $(view.el);
                 $el.removeClass();
@@ -513,7 +539,7 @@
                 view.removeTools();
             });
             
-            this.$tools.find('.left').click(function(e) {
+            this.$tools.find('.etch-left').click(function(e) {
                 e.preventDefault();
                 var $el = $(view.el);
                 $el.removeClass();
@@ -521,7 +547,7 @@
                 view.removeTools();
             });
             
-            this.$tools.find('.delete').click(function(e) {
+            this.$tools.find('.etch-delete').click(function(e) {
                 e.preventDefault();
                 $(view.el).remove();
                 view.removeTools();
@@ -559,7 +585,7 @@
         $.extend(settings, options);
 
         return this.each(function(){
-            var $notify = $(this).find('.notify').first();
+            var $notify = $(this).find('.etch-notify').first();
 
             clearTimeout($notify.data('notifyTimeoutId'));
             $notify.stop(true, true);

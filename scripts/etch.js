@@ -39,19 +39,19 @@
         },
 
         events: {
-            'click .bold': 'toggleBold',
-            'click .italic': 'toggleItalic',
-            'click .underline': 'toggleUnderline',
-            'click .heading': 'toggleHeading',
-            'click .unordered-list': 'toggleUnorderedList',
-            'click .justify-left': 'justifyLeft',
-            'click .justify-center': 'justifyCenter',
-            'click .justify-right': 'justifyRight',
-            'click .ordered-list': 'toggleOrderedList',
-            'click .link': 'toggleLink',
-            'click .image': 'getImage',
-            'click .save': 'save',
-            'click .cite': 'addCitation'
+            'click .etch-bold': 'toggleBold',
+            'click .etch-italic': 'toggleItalic',
+            'click .etch-underline': 'toggleUnderline',
+            'click .etch-heading': 'toggleHeading',
+            'click .etch-unordered-list': 'toggleUnorderedList',
+            'click .etch-justify-left': 'justifyLeft',
+            'click .etch-justify-center': 'justifyCenter',
+            'click .etch-justify-right': 'justifyRight',
+            'click .etch-ordered-list': 'toggleOrderedList',
+            'click .etch-link': 'toggleLink',
+            'click .etch-image': 'getImage',
+            'click .etch-save': 'save',
+            'click .etch-cite': 'addCitation'
         },
         
         changeEditable: function() {
@@ -73,7 +73,7 @@
             if (!buttons.length) { $(this.el).hide(); return; }
             
             _.each(this.model.get('buttons'), function(button){
-                var $buttonEl = $('<a href="#" class="editor-button '+ button +'" title="'+ button.replace('-', ' ') +'"><span></span></a>');
+                var $buttonEl = $('<a href="#" class="etch-editor-button etch-'+ button +'" title="'+ button.replace('-', ' ') +'"><span></span></a>');
                 view.$el.append($buttonEl);
             });
             
@@ -232,10 +232,10 @@
             $editable.attr('contenteditable', true);
 
             // if the editor isn't already built, build it
-            var $editor = $('.editor-panel');
+            var $editor = $('.etch-editor-panel');
             var editorModel = $editor.data('model');
             if (!$editor.size()) {
-                $editor = $('<div class="editor-panel">');
+                $editor = $('<div class="etch-editor-panel">');
                 var editorAttrs = { editable: $editable, editableModel: this.model };
                 document.body.appendChild($editor[0]);
                 $editor.etchInstantiate({classType: 'Editor', attrs: editorAttrs});
@@ -264,7 +264,7 @@
             // listen for mousedowns that are not coming from the editor
             // and close the editor
             $('body').bind('mousedown.editor', function(e) {
-                if ($(e.srcElement).not('.editor-panel, .editor-panel *, .image-tools, .image-tools *').size()) {
+                if ($(e.srcElement).not('.etch-editor-panel, .etch-editor-panel *, .etch-image-tools, .etch-image-tools *').size()) {
                     $editor.remove();
                     // unblind the image-tools if the editor isn't active
                     $editable.find('img').unbind('mouseover');
