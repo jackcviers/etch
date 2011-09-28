@@ -20,7 +20,6 @@
         'all': ['bold', 'italic', 'underline', 'unordered-list', 'ordered-list', 'link', 'save'],
         'title': ['bold', 'italic', 'underline', 'save'],
         'fact': ['bold', 'italic', 'underline', 'link', 'save'],
-        'test': ['bold', 'image', 'save']
     }
 
     models.Editor = Backbone.Model;
@@ -171,6 +170,8 @@
 
         getImage: function(e) {
             e.preventDefault();
+
+            // call startUploader with callback to handle inserting it
             this.startUploader(this.insertImage);
         },
         
@@ -178,12 +179,17 @@
             // initialize Image Uploader
             var model = new models.ImageUploader();
             var view = new views.ImageUploader({model: model});
-
+            
+            // stash a reference to the callback to be called after image is uploaded
             model._imageCallback = function(image) {
                 view.startCropper(image, cb);
             };
 
+
+            // stash reference to saved range for inserting the image once its 
             this._savedRange = window.getSelection().getRangeAt(0);
+
+            // insert uploader html into DOM
             $('body').append(view.render().el);
         },
         
