@@ -1,1 +1,1 @@
-see [http://etchjs.com|etchjs.com] for documentation
+see [etchjs.com](http://etchjs.com) for documentation
