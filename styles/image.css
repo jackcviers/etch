@@ -57,7 +57,7 @@
 
 /*=== Image Cropper ===*/
 
-.etch-image-cropper { position: fixed; left: 50%; top: 50%; margin-left: -540px; margin-top: -238px; height: 435px; width: 1045px; z-index: 1000; }
+.etch-image-cropper { position: fixed; left: 50%; top: 50%; margin-left: -540px; margin-top: -238px; height: 435px; width: 1045px; z-index: 10000; }
 .etch-image-cropper .etch-crop-section { width: 430px; float: left; border-right: 1px solid #ddd; padding-right: 20px; margin-right: 20px; text-align: center; }
 .etch-image-cropper .etch-aspect-links { margin-bottom: 15px; }
 .etch-image-cropper .etch-raw-image-wrapper { overflow: hidden; display: inline-block; }

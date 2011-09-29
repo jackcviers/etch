@@ -54,7 +54,7 @@
             </div>\
         </div>\
         <div class="etch-preview-section">\
-            <ul class="etch-link-list etch-tabs aspect-links">\
+            <ul class="etch-link-list etch-tabs etch-aspect-links">\
                 {% _.each(etch.aspectPresets, function(value, key) { %}\
                     <li><a href="#" class="etch-aspect-preset" data-aspect="{{ key }}">{{ key }}</a></li>\
                 {% }); %}\
@@ -190,7 +190,7 @@
                     view.$('.etch-gallery').html(template(data));
                 },
                 error: function(data) {
-                    $('etch-body').etchNotify({type: 'error', message: data.responseText, timeOut: 5000});
+                    $('body').etchNotify({type: 'error', message: data.responseText, timeOut: 5000});
                 }
             }
             
@@ -272,7 +272,7 @@
             var model = new models.ImageCropper(attrs);
             var view = new views.ImageCropper({model: model});
             $(this.el).remove();
-            $('etch-body').append(view.render().el);
+            $('body').append(view.render().el);
     
 
             var aspects = []
@@ -416,6 +416,8 @@
         updateCoords: function(coords) {
             var $cropPreviewImg = this.$('.etch-crop-preview[src]');
             var $cropSizeWrapper = this.$('.etch-crop-size-wrapper');
+
+            // get ratio between crop preview bounding box and the crop preview image
             var yRatio = $cropPreviewImg.height() / $cropSizeWrapper.height();
             var xRatio = $cropPreviewImg.width() / $cropSizeWrapper.width();
 
@@ -474,7 +476,7 @@
                 
                 view.model.set({
                     rawImgSize: {x:$rawImg.outerWidth(), y:$rawImg.outerHeight()},
-                    previewSize: {y: $previewWrapper.outerHeight(), x: $previewWrapper.outerWidth()}
+                    previewSize: {y: $previewWrapper.height(), x: $previewWrapper.width()}
                 });
 
 
@@ -510,7 +512,7 @@
             var view = this;
             $el = $(this.el);
             this.$tools = $(this.renderTools().tools);
-            $('etch-body').append(this.$tools);
+            $('body').append(this.$tools);
             this.$tools.css({
                 top: $el.offset().top,
                 left: $el.offset().left,
