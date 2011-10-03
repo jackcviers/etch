@@ -208,7 +208,7 @@
 
             var model = new models.EditableImage(attrs);
             var view = new views.EditableImage({model: model});
-            this._savedRange.insertNode($(view.render().el).addClass('float-left')[0]);
+            this._savedRange.insertNode($(view.render().el).addClass('etch-float-left')[0]);
         },
         
         save: function(e) {

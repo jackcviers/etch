@@ -537,7 +537,7 @@
                 e.preventDefault();
                 var $el = $(view.el);
                 $el.removeClass();
-                $el.addClass('centered');
+                $el.addClass('etch-centered');
                 view.removeTools();
             });
             
@@ -545,7 +545,7 @@
                 e.preventDefault();
                 var $el = $(view.el);
                 $el.removeClass();
-                $el.addClass('float-left');
+                $el.addClass('etch-float-left');
                 view.removeTools();
             });
             
