@@ -108,9 +108,12 @@
 .etch-arrows .etch-right-arrow { float: left; margin-left: 10px; }
 
 /*=== Images ===*/
-img.etch-float-right { display: block; float: right; margin: 5px 0 0 10px; }
-img.etch-float-left { display: block; float: left; margin: 5px 10px 0 0; }
-img.etch-centered { float: none; display: block; margin: 5px auto 5px auto; }
+img.etch-float-right,
+img.float-right { display: block; float: right; margin: 5px 0 0 10px; }
+img.etch-float-left,
+img.float-left { display: block; float: left; margin: 5px 10px 0 0; }
+img.etch-centered, 
+img.centered { float: none; display: block; margin: 5px auto 5px auto; }
 
 /*=== Buttons ===*/
 .etch-button { background: #3b6eae; border: 1px solid #3165a4; color: #fff; padding: 5px 10px; margin: 0;

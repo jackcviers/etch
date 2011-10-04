@@ -3,9 +3,13 @@
         views = window.etch.views,
         collections = window.etch.collections;
 
+    // default search term for image search
     etch.defaultImageSearch = 'dogs';
+
+    // boolean for enabling/disabling resizing the preview image
     etch.previewResizable = true;
 
+    // aspect ratio preset button definitions
     etch.aspectPresets = {
         'landscape': {aspectRatio: 4/3, previewSize: {x: 176, y: 132}},
         'portrait': {aspectRatio: 3/4, previewSize: {x: 130, y: 174}},
@@ -159,6 +163,7 @@
         },
 
         closeWindow: function(e) {
+            // close image uploader
             e.preventDefault();
             this.remove(); 
         },
@@ -172,11 +177,13 @@
         },
         
         uploadSubmit: function(e) {
+            // submit file upload form
             e.preventDefault();
             this.$('.etch-file-upload form').submit();
         },
         
         imageSearch: function(options) {
+            // search flickr for search terms
             var view = this;
             var template = _.template(imagePaneTemplate);
             var settings = {
@@ -216,35 +223,41 @@
         },
         
         navigateImages: function(e) {
+            // switch image search panes
             e.preventDefault();
             var difference = $(e.target).hasClass('etch-prev') ? -1 : 1;
             this.model.set({'index': this.model.get('index') + difference});
         },
         
         termsKeypress: function(e) {
+            // set search terms on model if ENTER is pressed on search term input
             if (e.keyCode == $.ui.keyCode.ENTER) {
                 this.webSearch(e);
             }
         },
         
         webSearch: function(e) {
+            // set search terms on model
             e.preventDefault();
             this.model.set({'terms': this.$('.etch-web-search-terms').val(), 'index': 0});
         },
 
         urlSubmit: function(e) {
+            // submit url upload form
             e.preventDefault();
             var url = this.$('.etch-url-upload .etch-image-url').val()
             this.uploadImage(url);
         },
         
         gallerySubmit: function(e) {
+            // submit choice from image gallery
             e.preventDefault();
             var url = $(e.target).closest('a').attr('href');
             this.uploadImage(url)
         },
                 
         uploadImage: function(url, cb) {
+            // upload image...  
             var callback = cb || this.uploadCallback;
             $.ajax({
                 type: 'POST',
@@ -255,12 +268,14 @@
         },
         
         uploadCallback: function(res) {
+            // parse upload response and feed image to imageCallback
             var image = JSON.parse(res).images.image;
             this.model._imageCallback(image);
         },
         
-        // this is called as a success callback from the upload form
         startCropper: function(image, cb) {
+            // this is called as a success callback from the upload form
+
             var self = this;
             var image;
             
@@ -269,17 +284,20 @@
                 id: image.filename
             });
 
+            // create and render ImageCropper 
             var model = new models.ImageCropper(attrs);
             var view = new views.ImageCropper({model: model});
             $(this.el).remove();
             $('body').append(view.render().el);
     
 
+            // get aspects ratios
             var aspects = []
             _.each(etch.aspectPresets, function(value, key) {
                aspects.push(etch.aspectPresets[key]);
             });
 
+            // set first aspect preset as default
             var defaultAspect = aspects[0]
 
             // wait for the image to load and then
@@ -292,21 +310,28 @@
                     onSelect: view.updateCoords
                 });
 
+                // set initial selection
                 cropApi.setSelect([0, 0, defaultAspect.previewSize.x, defaultAspect.previewSize.y]);
+
+                // set initial aspect ratio
                 cropApi.setOptions({aspectRatio: defaultAspect.aspectRatio});
+
+                // set default preview size
                 view.model.set({'previewSize': defaultAspect.previewSize});
+
+                // stash reference to jcrop api for later use
                 view.model.set({cropApi: cropApi});
 
                 // TODO: hacky.  triggering a click to make the image preview reset itself to the first preset
                 // fix this later when I have time to refactor this code
                 $('.etch-aspect-links li a').first().click();
-                // view.updateCoords({x: 0, y: 0, w: defaultAspect.previewSize.x, h: defaultAspect.previewSize.y});
 
                 view.model._imageCallback = cb;
             });
         },
         
         switchTab: function(e) {
+            // navigate between image uploading options
             e.preventDefault();
             $anchor = $(e.target);
             $tab = $anchor.parent('li');
@@ -322,6 +347,7 @@
         },
         
         render: function() {
+            // render uploader
             $(this.el).html(this.template(this.model.toJSON()));
             this.applyUploadForm();
             return this;
@@ -346,21 +372,19 @@
         template: _.template(imageCropTemplate),
 
         events: {
-            // 'click .aspect-banner': 'aspectBanner',
-            // 'click .aspect-square': 'aspectSquare',
-            // 'click .aspect-portrait': 'aspectPortrait',
-            // 'click .aspect-landscape': 'aspectLandscape',
             'click .etch-aspect-preset': 'setAspect',
             'click .etch-apply-crop': 'applyCrop',
             'click a.etch-section-delete': 'closeWindow'
         },
 
         closeWindow: function(e) {
+            // close cropper
             e.preventDefault();
             this.remove();
         },
 
         setAspect: function(e) {
+            // set new aspect ratio
             e && e.preventDefault();
             var preset = etch.aspectPresets[$(e.target).attr('data-aspect')];
             
@@ -376,18 +400,25 @@
         },
 
         previewResize: function(newSize) {
+            // resize preview image
         	var $img = this.$('.etch-crop-preview');
+
+            // establish ratios
             var previewSize = this.model.get('previewSize');
             var marginRatio = newSize.width / previewSize.x;
             var mLeft = parseInt($img.css('margin-left'));
             var mTop = parseInt($img.css('margin-top'));
             var ratio = this.model.get('cropSizeRatio');
-            // $img.css({height: cropSize.height * ratio, width: cropSize.width * ratio, 'margin-left': mleft * ratio, 'margin-top': mtop * ratio});
+
+            // change size on element
             $img.css({height: newSize.height * ratio.y, width: newSize.width * ratio.x, 'margin-left': mLeft * marginRatio, 'margin-top': mTop * marginRatio});
+
+            // set size on model
             this.model.set({'previewSize': {x: newSize.width, y: newSize.height}});
         },
         
         applyCrop: function(e) {
+            // send crop info to server and crop image
             e.preventDefault();
             var view = this;
             var coords = this.model.get('coords');
@@ -403,9 +434,11 @@
                     view.destroy();
                     var image = res.images.image
                     
-                    // strip out url query strings now that the image has been edited
+                    // add timestamped querystrings to images to force out of browser cache
                     image.url = image.url +'?'+ new Date().valueOf();
                     image.url_local = image.url_local +'?'+ new Date().valueOf();
+
+                    // call imageCallback
                     view.model._imageCallback(image);
                 }
             };

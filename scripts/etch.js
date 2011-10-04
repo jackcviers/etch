@@ -56,15 +56,18 @@
         
         changeEditable: function() {
             this.setButtonClass();
+            // Im assuming that Ill add more functionality here
         },
 
         setButtonClass: function() {
+            // check the button class of the element being edited and set the associated buttons on the model
             var editorModel = this.model;
             var buttonClass = editorModel.get('editable').attr('data-button-class') || 'default';
             editorModel.set({ buttons: etch.buttonClasses[buttonClass] });
         },
 
         changeButtons: function() {
+            // render the buttons into the editor-panel
             this.$el.empty();
             var view = this;
             var buttons = this.model.get('buttons');
@@ -81,11 +84,13 @@
         },
 
         changePosition: function() {
+            // animate editor-panel to new position
             var pos = this.model.get('position');
             this.$el.animate({'top': pos.y, 'left': pos.x}, { queue: false });
         },
         
         wrapSelection: function(selectionOrRange, elString, cb) {
+            // wrap current selection with elString tag
             var range = selectionOrRange === Range ? selectionOrRange : selectionOrRange.getRangeAt(0);
             var el = document.createElement(elString);
             range.surroundContents(el);
@@ -171,7 +176,7 @@
         getImage: function(e) {
             e.preventDefault();
 
-            // call startUploader with callback to handle inserting it
+            // call startUploader with callback to handle inserting it once it is uploded/cropped
             this.startUploader(this.insertImage);
         },
         
@@ -193,8 +198,8 @@
             $('body').append(view.render().el);
         },
         
-        // passed as a callback to startUploader
         insertImage: function(image) {
+            // insert image - passed as a callback to startUploader
             var sel = window.getSelection();
             sel.removeAllRanges();
             sel.addRange(this._savedRange);
@@ -308,6 +313,8 @@
     }
 
     $.fn.etchFindEditable = function() {
+        // function that looks for the editable selector on itself or its parents
+        // and returns that el when it is found
         $el = $(this);
         return $el.is(etch.selector) ? $el : $el.closest(etch.selector);
     }
