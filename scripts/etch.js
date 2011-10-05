@@ -257,11 +257,16 @@
 
             if (models.EditableImage) {
                 // instantiate any images that may be in the editable
-                var imgs = $editable.find('img');
-                if (imgs.size()) {
+                var $imgs = $editable.find('img');
+                if ($imgs.size()) {
                     var attrs = { editable: $editable, editableModel: this.model };
-                    imgs.each(function() {
-                        $(this).etchInstantiate({classType: 'EditableImage', attrs: attrs});
+                    $imgs.each(function() {
+                        var $this = $(this);
+                        if (!$this.data('editableImageModel')) {
+                            var editableImageModel =  new models.EditableImage(attrs);
+                            var editableImageView = new views.EditableImage({model: editableImageModel, el: this, tagName: this.tagName});
+                            $this.data('editableImageModel', editableImageModel);
+                        }
                     });
                 }
             }
@@ -271,8 +276,13 @@
             $('body').bind('mousedown.editor', function(e) {
                 if ($(e.srcElement).not('.etch-editor-panel, .etch-editor-panel *, .etch-image-tools, .etch-image-tools *').size()) {
                     $editor.remove();
+                    
                     // unblind the image-tools if the editor isn't active
-                    $editable.find('img').unbind('mouseover');
+                    $editable.find('img').unbind('mouseenter');
+                    
+                    // remove any latent image tool model references
+                    $(etch.selector+' img').data('editableImageModel', false)
+                    
                     // once the editor is removed, remove the body binding for it
                     $(this).unbind('mousedown.editor');
                 }

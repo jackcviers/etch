@@ -549,8 +549,8 @@
             this.$tools.css({
                 top: $el.offset().top,
                 left: $el.offset().left,
-                height: $el.outerHeight(),
-                width: $el.outerWidth()
+                height: $el.outerHeight() + 3,
+                width: $el.outerWidth() + 3
             });
             
             this.$tools.bind('mouseleave', function() {
@@ -593,8 +593,8 @@
         
         removeTools: function(duration) {
             var view = this;
-            view.$tools.hide('fade', 'fast', function() {
-                view.$tools.remove();
+            $('.etch-image-tools').hide('fade', 'fast', function() {
+                $(this).remove();
             });
         },
         
